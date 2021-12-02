@@ -1,3 +1,4 @@
+/** Abstract class can't be instantiated but has to be extended */
 abstract class Department {
     static financialYear = new Date().getFullYear();
     /**
@@ -138,7 +139,8 @@ console.log(employee1, Department.financialYear);
 const IT = new ITDepartment('d1', ['Dylan']);
 IT.describe();
 
-/** Cant be created now because of abstract
+/**
+ * Cant be created now because of abstract
  * const accounting = new Department('d1', 'Accounting');
  * accounting.addEmployee('David');
  * accounting.addEmployee('Zoey');
