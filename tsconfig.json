@@ -1,6 +1,7 @@
 {
   "exclude": [
     "basic-types",
+    "classes",
     "node_modules"
   ],
   "compilerOptions": {
