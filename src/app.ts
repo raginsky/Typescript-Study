@@ -85,3 +85,47 @@ function useVehicle(vehicle: Vehicle) {
 
 useVehicle(v1);
 useVehicle(v2);
+
+/** Discriminated Unions */
+interface Bird {
+    /** Kind of object description */
+    type: 'bird';
+    flyingSpeed: number;
+}
+
+interface Horse {
+    type: 'horse';
+    runningSpeed: number;
+}
+
+type Animal = Bird | Horse;
+
+function moveAnimal(animal: Animal) {
+    let speed;
+    switch (animal.type) {
+        case 'bird':
+            speed = animal.flyingSpeed;
+            break;
+        case 'horse':
+            speed = animal.runningSpeed;
+            break;
+    }
+    console.log(`Moving at speed ${speed}`)
+}
+
+moveAnimal({type: 'bird', flyingSpeed: 300});
+
+/** Type casting */
+const userInputElement = <HTMLInputElement>document.getElementById('user_input');
+
+/** Alternative:
+ * const userInputElement = document.getElementById('user_input')! as HTMLInputElement;
+ *
+ * Alternative if returned value can possible be null:
+ * const userInputElement = document.getElementById('user_input');
+ * if(userInputElement) {
+ *     (userInputElement as HTMLInputElement).value = 'Hi there!';
+ * }
+ */
+
+userInputElement.value = 'Hi there!';
