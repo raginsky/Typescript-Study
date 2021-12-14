@@ -27,6 +27,16 @@ type Numeric = number | boolean;
 /** Can be only number since it's common combined previous types*/
 type Universal = Combinable & Numeric;
 
+
+/** Function overloads:
+ * we're basically saying to TS that if we're getting 2 numbers,
+ * then return of this function is also a number
+ */
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
+function add(a: number, b: string): string;
+function add(a: string, b: number): string;
+
 function add(a: Combinable, b: Combinable) {
     /** Type Guard */
     if (typeof a === 'string' || typeof b === 'string') {
@@ -34,6 +44,22 @@ function add(a: Combinable, b: Combinable) {
     }
     return a + b;
 }
+
+/** Optional chaining */
+const fetchedUserData = {
+    id: 'u1',
+    name: 'Max',
+    // job: {title: 'CEO', description: 'My Company',}
+};
+/** Execute only if job is defined
+ * console.log(fetchedUserData?.job.title);
+ */
+
+/** Nullish Coalescing:
+ *  If this is null OR undefined - then use the fallback
+ */
+const userInput = '';
+const storedData = userInput ?? 'DEFAULT';
 
 type UnknownEmployee = Employee | Admin;
 
@@ -129,3 +155,15 @@ const userInputElement = <HTMLInputElement>document.getElementById('user_input')
  */
 
 userInputElement.value = 'Hi there!';
+
+interface ErrorContainer {
+    /** Index type - if we don't know exactly which property we will get
+     * must have property and value of type string
+     */
+    [prop: string]: string;
+}
+
+const errorBag: ErrorContainer = {
+    email: 'Not a valid email!',
+    username: 'Must start with a capital character',
+}

@@ -2,6 +2,11 @@
 
 [tsc CLI Options](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
 
+#### Start a live-server
+```bash
+yarn start
+```
+
 #### Run a compile based on a backwards look through the fs for a tsconfig.json
 ```bash
 tsc
