@@ -20,3 +20,64 @@ function merge<T extends object, U extends object>(objA: T, objB: U) {
  */
 const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
 console.log(mergedObj.age);
+
+interface Length {
+    length: number;
+}
+
+function countAndPrint<T extends Length>(element: T): [T, string] {
+    let descriptionText = 'No value.';
+    if (element.length === 1) {
+        descriptionText = 'Got 1 element.';
+    } else if (element.length > 1) {
+        descriptionText = `Got ${element.length} elements`;
+    }
+    return [element, descriptionText];
+}
+
+console.log(countAndPrint(''));
+
+/** The second parameter must be any kind of key in first parameter object */
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+    return 'Value' + obj[key];
+}
+
+/** So the second parameter will not return error only in case when it really exists in object */
+extractAndConvert({name: 'Rogan'}, 'name');
+
+class DataStorage<T extends string | number | boolean> {
+    private data: T[] = [];
+
+
+    addItem(item: T) {
+        this.data.push(item);
+    }
+
+    removeItem(item: T) {
+        if (this.data.indexOf(item) === -1) {
+            return;
+        }
+        this.data.splice(this.data.indexOf(item), 1); // -1
+    }
+
+    getItems() {
+        return [...this.data];
+    }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem('Felix');
+textStorage.addItem('Manu');
+textStorage.removeItem('Felix');
+console.log(textStorage.getItems());
+
+/** Can create different type of storages from same class */
+const numberStorage = new DataStorage<number>();
+/**
+ * const objStorage = new DataStorage<object>();
+ * objStorage.addItem({name: 'Felix'});
+ * objStorage.addItem({name: 'Manu'});
+ * objStorage.removeItem({name: 'Manu'});
+ * console.log(objStorage.getItems());
+ */
+
