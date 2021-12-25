@@ -46,6 +46,12 @@ function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) 
 extractAndConvert({name: 'Rogan'}, 'name');
 
 class DataStorage<T extends string | number | boolean> {
+    /**
+     * We can create it as Union type. But won't!
+     * With Union types we can't lock certain type for entire function on init.
+     * private data: string[] | number[] | boolean[] = []
+     */
+
     private data: T[] = [];
 
 
@@ -73,6 +79,7 @@ console.log(textStorage.getItems());
 
 /** Can create different type of storages from same class */
 const numberStorage = new DataStorage<number>();
+
 /**
  * const objStorage = new DataStorage<object>();
  * objStorage.addItem({name: 'Felix'});
@@ -81,3 +88,26 @@ const numberStorage = new DataStorage<number>();
  * console.log(objStorage.getItems());
  */
 
+interface CourseGoal {
+    title: string;
+    description: string;
+    completeUntil: Date;
+}
+
+/**
+ * function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+ *     return {title: title, description: description, completeUntil: date};
+ * }
+ */
+
+function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+    /** Partial allows us to use interface optionally */
+    let courseGoal: Partial<CourseGoal> = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = date;
+    return courseGoal as CourseGoal;
+}
+
+const names: Readonly<string[]> = ['Leon', 'Anna'];
+// names.push('Manu');
