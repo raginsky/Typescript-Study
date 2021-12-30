@@ -1,113 +1,34 @@
-/** Basically 2 connected types
- * const names: Array<string> = []; // string[]
- * names[0].split(' ');
- * Helps to get additional type information
- * const promise: Promise<string> = new Promise((resolve, reject) => {
- * setTimeout(() => {
- * resolve('Done!');
- * }, 2000);
- * });
- */
-
-/** Constraints: ex.: The T type could be any type but has to be an object */
-function merge<T extends object, U extends object>(objA: T, objB: U) {
-    return Object.assign(objA, objB);
-}
-
-/**
- * const mergedObj = merge({name: 'Max'}, {age: 30} as {name: string, age: number});
- * const mergedObj = merge<{name: string, hobbies: string[]}, { age: number }>({name: 'Max', hobbies: ['Sports']}, {age: 30});
- */
-const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
-console.log(mergedObj.age);
-
-interface Length {
-    length: number;
-}
-
-function countAndPrint<T extends Length>(element: T): [T, string] {
-    let descriptionText = 'No value.';
-    if (element.length === 1) {
-        descriptionText = 'Got 1 element.';
-    } else if (element.length > 1) {
-        descriptionText = `Got ${element.length} elements`;
+/** Decorator factory */
+function Logger(logString: string) {
+    /** Decorator */
+    return function (constructor: Function) {
+        console.log(logString);
+        console.log(constructor);
     }
-    return [element, descriptionText];
 }
 
-console.log(countAndPrint(''));
-
-/** The second parameter must be any kind of key in first parameter object */
-function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
-    return 'Value' + obj[key];
-}
-
-/** So the second parameter will not return error only in case when it really exists in object */
-extractAndConvert({name: 'Rogan'}, 'name');
-
-class DataStorage<T extends string | number | boolean> {
-    /**
-     * We can create it as Union type. But won't!
-     * With Union types we can't lock certain type for entire function on init.
-     * private data: string[] | number[] | boolean[] = []
-     */
-
-    private data: T[] = [];
-
-
-    addItem(item: T) {
-        this.data.push(item);
-    }
-
-    removeItem(item: T) {
-        if (this.data.indexOf(item) === -1) {
-            return;
+function WithTemplate(template: string, hookId: string) {
+    /** `_` basically tells to Typescript, that, yes, we need this argument, but we wouldn't really use it */
+    return function (_: Function) {
+        const hookEl = document.getElementById(hookId);
+        if (hookEl) {
+            hookEl.innerHTML = template;
         }
-        this.data.splice(this.data.indexOf(item), 1); // -1
-    }
-
-    getItems() {
-        return [...this.data];
     }
 }
 
-const textStorage = new DataStorage<string>();
-textStorage.addItem('Felix');
-textStorage.addItem('Manu');
-textStorage.removeItem('Felix');
-console.log(textStorage.getItems());
+/** Decorator provide a way to add annotations for class declaration.
+ * It will be executed before class members he's come before.
+ * @Logger('LOGGING PERSON')
+ * */
+@WithTemplate('<h1>Person object</h1>', 'app')
+class Person {
+    name = 'David';
 
-/** Can create different type of storages from same class */
-const numberStorage = new DataStorage<number>();
-
-/**
- * const objStorage = new DataStorage<object>();
- * objStorage.addItem({name: 'Felix'});
- * objStorage.addItem({name: 'Manu'});
- * objStorage.removeItem({name: 'Manu'});
- * console.log(objStorage.getItems());
- */
-
-interface CourseGoal {
-    title: string;
-    description: string;
-    completeUntil: Date;
+    constructor() {
+        console.log('Creating new object...');
+    }
 }
 
-/**
- * function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
- *     return {title: title, description: description, completeUntil: date};
- * }
- */
-
-function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
-    /** Partial allows us to use interface optionally */
-    let courseGoal: Partial<CourseGoal> = {};
-    courseGoal.title = title;
-    courseGoal.description = description;
-    courseGoal.completeUntil = date;
-    return courseGoal as CourseGoal;
-}
-
-const names: Readonly<string[]> = ['Leon', 'Anna'];
-// names.push('Manu');
+const persons = new Person();
+console.log(persons);
