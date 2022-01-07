@@ -7,19 +7,25 @@ function Logger(logString: string) {
     }
 }
 
+/** Now it'll execute only on class instantiation, not definition */
 function WithTemplate(template: string, hookId: string) {
+    console.log('TEMPLATE FACTORY');
     /** `_` basically tells to Typescript, that, yes, we need this argument, but we wouldn't really use it
      * return function (_: Function) {
      */
-    return function (constructor: any) {
-        console.log('Rendering template');
-        const hookEl = document.getElementById(hookId);
-        const p = new constructor();
-        if (hookEl) {
-            hookEl.innerHTML = template;
-            /** Now it's kind of utility, that provides element render */
-            hookEl.querySelector('h1')!.textContent = p.name;
-        }
+    return function <T extends { new(...args: any[]): { name: string } }>(originalConstructor: T) {
+        return class extends originalConstructor {
+            constructor(..._: any[]) {
+                super();
+                console.log('Rendering template');
+                const hookEl = document.getElementById(hookId);
+                if (hookEl) {
+                    hookEl.innerHTML = template;
+                    /** Now it's kind of utility, that provides element render */
+                    hookEl.querySelector('h1')!.textContent = this.name;
+                }
+            }
+        };
     }
 }
 
@@ -65,6 +71,9 @@ function Log4(target: any, name: string | Symbol, position: number) {
     console.log(position);
 }
 
+/** Decorators are not event listeners, it's a function, that executes
+ *  on class definition / method registration / etc.
+ */
 class Product {
     /** Executes when we define this property */
     @Log
@@ -90,4 +99,35 @@ class Product {
     getPriceWithTax(@Log4 tax: number) {
         return this._price * (1 + tax);
     }
+
 }
+
+const p1 = new Product('Book', 19);
+const p2 = new Product('Book 2', 21);
+
+function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+    const adjDescriptor: PropertyDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            return originalMethod.bind(this);
+        },
+    };
+    return adjDescriptor;
+}
+
+
+class Printer {
+    message = `It's alive!`
+
+    @Autobind
+    showMessage() {
+        console.log(this.message);
+    }
+}
+
+const p = new Printer();
+
+const button = document.querySelector('button')!;
+button.addEventListener('click', p.showMessage);
