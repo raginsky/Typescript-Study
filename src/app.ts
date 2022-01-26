@@ -1,3 +1,34 @@
+/** Validation */
+interface Validatable {
+    value: string | number;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+}
+
+function validate(validatebleInput: Validatable) {
+    let isValid = true;
+    if (validatebleInput.required) {
+        isValid = isValid && validatebleInput.value.toString().trim().length !== 0;
+    }
+    if (validatebleInput.minLength != null && typeof validatebleInput.value === 'string') {
+        isValid = isValid && validatebleInput.value.length > validatebleInput.minLength;
+    }
+    if (validatebleInput.maxLength != null && typeof validatebleInput.value === 'string') {
+        isValid = isValid && validatebleInput.value.length < validatebleInput.maxLength;
+    }
+    if (validatebleInput.min != null && typeof validatebleInput.value === 'number') {
+        isValid = isValid && validatebleInput.value > validatebleInput.min;
+    }
+    if (validatebleInput.max != null && typeof validatebleInput.value === 'number') {
+        isValid = isValid && validatebleInput.value < validatebleInput.max;
+    }
+
+    return isValid;
+}
+
 /** Autobind Decorator */
 function Binding(_: any, _2: any, descriptor: PropertyDescriptor) {
     const initMethod = descriptor.value;
@@ -9,6 +40,22 @@ function Binding(_: any, _2: any, descriptor: PropertyDescriptor) {
         }
     }
     return adjDescriptor;
+}
+
+/** ProjectList Class */
+class ProjectList {
+    templateElement: HTMLTemplateElement;
+    hostElement: HTMLDivElement;
+    element: HTMLElement;
+
+    constructor() {
+        this.templateElement = document.getElementById('project_list')! as HTMLTemplateElement;
+        this.hostElement = document.getElementById('app')! as HTMLDivElement;
+
+        const importedNode = document.importNode(this.templateElement.content, true);
+        this.element = importedNode.firstElementChild as HTMLFormElement;
+        this.element.id = 'user_input';
+    }
 }
 
 /** ProjectInput Class */
@@ -41,10 +88,26 @@ class ProjectInput {
         const enteredDesc = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
 
+        const titleValidateable: Validatable = {
+            value: enteredTitle,
+            required: true
+        };
+        const descValidatable: Validatable = {
+            value: enteredDesc,
+            required: true,
+            minLength: 5,
+        };
+        const peopleValidatable: Validatable = {
+            value: +enteredPeople,
+            required: true,
+            min: 1,
+            max: 5
+        };
+
         if (
-            enteredTitle.trim().length === 0 ||
-            enteredDesc.trim().length === 0 ||
-            enteredPeople.trim().length === 0
+            !validate(titleValidateable) ||
+            !validate(descValidatable) ||
+            !validate(peopleValidatable)
         ) {
             alert('Invalid input, please try again!');
             return;
