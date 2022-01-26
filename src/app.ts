@@ -48,13 +48,24 @@ class ProjectList {
     hostElement: HTMLDivElement;
     element: HTMLElement;
 
-    constructor() {
+    constructor(private type: 'active' | 'finished') {
         this.templateElement = document.getElementById('project_list')! as HTMLTemplateElement;
         this.hostElement = document.getElementById('app')! as HTMLDivElement;
 
         const importedNode = document.importNode(this.templateElement.content, true);
         this.element = importedNode.firstElementChild as HTMLFormElement;
-        this.element.id = 'user_input';
+        this.element.id = `${this.type}-projects`;
+        this.attach();
+        this.renderContent();
+    }
+
+    private renderContent() {
+        this.element.querySelector('ul')!.id = `${this.type}_projects_list`;
+        this.element.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
+    }
+
+    private attach() {
+        this.hostElement.insertAdjacentElement('beforeend', this.element);
     }
 }
 
@@ -143,3 +154,5 @@ class ProjectInput {
 }
 
 const projectInput = new ProjectInput();
+const activeProject = new ProjectList('active');
+const finishedProject = new ProjectList('finished');
