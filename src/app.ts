@@ -99,7 +99,7 @@ class ProjectInput {
         const enteredDesc = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
 
-        const titleValidateable: Validatable = {
+        const titleValidatable: Validatable = {
             value: enteredTitle,
             required: true
         };
@@ -116,7 +116,7 @@ class ProjectInput {
         };
 
         if (
-            !validate(titleValidateable) ||
+            !validate(titleValidatable) ||
             !validate(descValidatable) ||
             !validate(peopleValidatable)
         ) {
