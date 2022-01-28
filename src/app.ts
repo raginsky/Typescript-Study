@@ -49,7 +49,7 @@ class ProjectState {
     element: HTMLElement;
 
     constructor(public title: string | number, public desc: string | number, public people: number) {
-        this.templateElement = document.getElementById('active_projects_list')! as HTMLTemplateElement;
+        this.templateElement = document.getElementById('single_project')! as HTMLTemplateElement;
         this.hostElement = document.getElementById('active_projects_list')! as HTMLDivElement;
         const importedNode = document.importNode(this.templateElement.content, true);
         this.element = importedNode.firstElementChild as HTMLFormElement;
@@ -59,7 +59,7 @@ class ProjectState {
     }
 
     private renderContent(title: string | number, desc: string | number, people: number) {
-        this.element.querySelector('h2')!.textContent = `${title} - ${desc} : ${people}`;
+        this.element.textContent = `${title} - ${desc} : ${people}`;
     }
 
     private attach() {
