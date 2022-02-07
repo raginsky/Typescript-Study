@@ -136,13 +136,12 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
 
     configure() {
         projectState.addListener((projects: Project[]) => {
-            const relevantProjects = projects.filter(prj => {
+            this.assignedProjects = projects.filter(prj => {
                 if (this.type === 'active') {
                     return prj.status === ProjectStatus.Active;
                 }
                 return prj.status === ProjectStatus.Finished;
             });
-            this.assignedProjects = relevantProjects;
             this.renderProjects();
         });
     }
@@ -156,9 +155,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
         const listEl = document.getElementById(`${this.type}_projects_list`)! as HTMLUListElement;
         listEl.innerHTML = '';
         for (const prjItem of this.assignedProjects) {
-            const listItem = document.createElement('li');
-            listItem.textContent = prjItem.title;
-            listEl.appendChild(listItem);
+            new ProjectItem(this.element.querySelector('ul')!.id, prjItem);
         }
     }
 }
@@ -234,6 +231,35 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
             projectState.addProject(title, desc, people);
             this.clearInputs();
         }
+    }
+}
+
+/** Project Input Class */
+class ProjectItem extends Component<HTMLUListElement, HTMLUListElement> {
+    private project: Project;
+
+    constructor(hostId: string, project: Project) {
+        super(`single_project`, hostId, false, project.id);
+        this.project = project;
+        this.configure();
+        this.renderContent();
+    }
+
+    get persons() {
+        if (this.project.people === 1) {
+            return '1 person';
+        } else {
+            return `${this.project.people} persons`;
+        }
+    }
+
+    configure() {
+    }
+
+    renderContent() {
+        this.element.querySelector('h2')!.textContent = this.project.title;
+        this.element.querySelector('h3')!.textContent = this.persons + ' assigned';
+        this.element.querySelector('p')!.textContent = this.project.description;
     }
 }
 
