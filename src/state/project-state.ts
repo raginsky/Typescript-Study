@@ -49,4 +49,6 @@ export class ProjectState extends State<Project> {
     }
 }
 
+/** Runs once even when imported multiply time*/
+console.log(`RUNNING...`)
 export const projectState = ProjectState.getInstance();

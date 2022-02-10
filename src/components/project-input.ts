@@ -1,10 +1,10 @@
-import {Component} from "./base.js";
-import {binding} from "../decorators/autobind.js";
-import {Validatable, validate} from "../util/validation.js";
+import Cmp from "./base.js";
+import {binding as Autobind} from "../decorators/autobind.js";
+import * as Validation from "../util/validation.js";
 import {projectState} from "../state/project-state.js";
 
 /** Project Input Class */
-export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
+export class ProjectInput extends Cmp<HTMLDivElement, HTMLFormElement> {
     titleInputElement: HTMLInputElement;
     descriptionInputElement: HTMLInputElement;
     peopleInputElement: HTMLInputElement;
@@ -19,7 +19,7 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
         this.configure();
     }
 
-    @binding
+    @Autobind
     configure() {
         this.element.addEventListener('submit', this.submitHandler.bind(this));
     }
@@ -32,16 +32,16 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
         const enteredDesc = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
 
-        const titleValidatable: Validatable = {
+        const titleValidatable: Validation.Validatable = {
             value: enteredTitle,
             required: true
         };
-        const descValidatable: Validatable = {
+        const descValidatable: Validation.Validatable = {
             value: enteredDesc,
             required: true,
             minLength: 4,
         };
-        const peopleValidatable: Validatable = {
+        const peopleValidatable: Validation.Validatable = {
             value: +enteredPeople,
             required: true,
             min: 1,
@@ -49,9 +49,9 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
         };
 
         if (
-            !validate(titleValidatable) ||
-            !validate(descValidatable) ||
-            !validate(peopleValidatable)
+            !Validation.validate(titleValidatable) ||
+            !Validation.validate(descValidatable) ||
+            !Validation.validate(peopleValidatable)
         ) {
             alert('Invalid input, please try again!');
             return;

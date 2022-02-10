@@ -1,5 +1,5 @@
 import {binding} from "../decorators/autobind.js";
-import {Component} from "./base.js";
+import Component from "./base.js";
 import {DragTarget} from "../models/drag-drop.js";
 import {Project, ProjectStatus} from "../models/project.js";
 import {projectState} from "../state/project-state.js";
