@@ -1,7 +1,8 @@
 import _ from 'lodash';
 // import 'reflect-metadata';
-import {plainToClass} from 'class-transformer';
+import {plainToInstance} from 'class-transformer';
 import {Product} from "./product.model";
+import {validate} from "class-validator";
 
 console.log(_.shuffle([1, 2, 3]));
 
@@ -24,7 +25,17 @@ const products = [
 //     console.log(prod.getInformation());
 // }
 
-const loadedProducts = plainToClass(Product, products);
+const loadedProducts = plainToInstance(Product, products);
 for (const prod of loadedProducts) {
     console.log(prod.getInformation());
 }
+
+const newProd = new Product('', -5.99);
+validate(newProd).then(errors => {
+    if (errors.length > 0) {
+        console.log('VALIDATION ERRORS!');
+        console.log(errors);
+    } else {
+        console.log(newProd.getInformation());
+    }
+});
