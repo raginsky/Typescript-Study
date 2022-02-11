@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const CleanPlugin = require('clean-webpack-plugin');
 
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new Dotenv(),
         new CleanPlugin.CleanWebpackPlugin()
     ],
     resolve: {
