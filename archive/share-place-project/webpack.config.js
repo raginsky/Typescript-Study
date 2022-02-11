@@ -1,15 +1,16 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
-const CleanPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: './src/app.ts',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: 'dist'
     },
-    devtool: false,
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {
@@ -21,7 +22,7 @@ module.exports = {
     },
     plugins: [
         new Dotenv(),
-        new CleanPlugin.CleanWebpackPlugin()
+        new HtmlWebpackPlugin()
     ],
     resolve: {
         extensions: ['.ts', '.js']

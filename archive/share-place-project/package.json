@@ -11,10 +11,15 @@
   "author": "Michael Raginsky",
   "license": "ISC",
   "devDependencies": {
+    "@types/googlemaps": "^3.43.3",
+    "@types/lodash": "^4.14.178",
     "clean-webpack-plugin": "^4.0.0",
-    "dotenv-webpack": "^7.1.0"
+    "dotenv-webpack": "^7.1.0",
+    "html-webpack-plugin": "^4.5.2"
   },
   "dependencies": {
+    "axios": "^0.25.0",
+    "lodash": "^4.17.21",
     "ts-loader": "^6.2.1",
     "typescript": "^4.5.5",
     "webpack": "^4.41.2",
