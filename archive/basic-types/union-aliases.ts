@@ -14,11 +14,12 @@ function combine(
     }
     return result;
 
-    // if (resultConversion === 'num') {
-    //     return +result;
-    // } else {
-    //     return result.toString();
-    // }
+    /**  if (resultConversion === 'num') {
+         return +result;
+     } else {
+         return result.toString();
+     }
+     */
 }
 
 const combinedAges = combine(30, 44, 'num');
